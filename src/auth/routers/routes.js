@@ -3,10 +3,10 @@
 const express = require('express');
 const authRouter = express.Router();
 
-const { users } = require('./models');
-const basicAuth = require('./middleware/basic.js')
-const bearerAuth = require('./middleware/bearer.js')
-const permissions = require('./middleware/acl.js')
+const { users } = require('../models');
+const basicAuth = require('../middleware/basic.js')
+const bearerAuth = require('../middleware/bearer.js')
+const permissions = require('../middleware/acl.js')
 
 authRouter.post('/signup', async (req, res, next) => {
   try {
@@ -20,6 +20,8 @@ authRouter.post('/signup', async (req, res, next) => {
     next(e.message)
   }
 });
+
+// token for username: 'matt' eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hdHQiLCJpYXQiOjE2NDI2MzkxOTB9.fmA0StLXc8nJFfYJsib78_WN-MW2fsTooIFUzbuGlno
 
 authRouter.post('/signin', basicAuth, (req, res, next) => {
   const user = {
