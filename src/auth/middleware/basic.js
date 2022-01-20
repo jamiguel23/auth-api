@@ -5,6 +5,7 @@ const { users } = require('../models');
 
 module.exports = async (req, res, next) => {
 
+  console.log('basic hit')
   if (!req.headers.authorization) { return _authError(); }
 
   let basic = req.headers.authorization.split(' ').pop();

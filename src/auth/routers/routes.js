@@ -21,24 +21,51 @@ authRouter.post('/signup', async (req, res, next) => {
   }
 });
 
-// token for username: 'matt' eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hdHQiLCJpYXQiOjE2NDI2MzkxOTB9.fmA0StLXc8nJFfYJsib78_WN-MW2fsTooIFUzbuGlno
+// token for username: 'matt' eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hdHQiLCJpYXQiOjE2NDI2NTMxMDV9.ELc3eKvXRY35Wd-Y4EmIuFHUFpjQ_Ignew85i_YW0CI
 
 authRouter.post('/signin', basicAuth, (req, res, next) => {
-  const user = {
-    user: req.user,
-    token: req.user.token
-  };
-  res.status(200).json(user);
+
+  try{
+
+    const user = {
+      user: req.user,
+      token: req.user.token
+    };
+    res.status(200).json(user);
+
+  } catch (e){
+    
+    console.log(e);
+    next(e.message)
+
+  }
 });
 
 authRouter.get('/users', bearerAuth, permissions('delete'), async (req, res, next) => {
-  const userRecords = await users.findAll({});
-  const list = userRecords.map(user => user.username);
-  res.status(200).json(list);
+
+  try{
+    const userRecords = await users.findAll({});
+    const list = userRecords.map(user => user.username);
+    res.status(200).json(list);
+    
+  } catch (e){
+    console.log(e)
+    next(e.message)
+
+  }
 });
 
 authRouter.get('/secret', bearerAuth, async (req, res, next) => {
-  res.status(200).send('Welcome to the secret area')
+
+  try{
+
+    res.status(200).send('Welcome to the secret area')
+
+  } catch(e){
+    console.log(e)
+    next(e.message)
+
+  }
 });
 
 module.exports = authRouter;

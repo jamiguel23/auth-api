@@ -2,6 +2,10 @@
 
 const express = require('express');
 const dataModules = require('../models');
+const basic = require('../middleware/basic.js')
+const bearer = require('../middleware/bearer.js')
+const acl = require('../middleware/acl.js')
+
 
 const router = express.Router();
 
@@ -15,13 +19,17 @@ router.param('model', (req, res, next) => {
   }
 });
 
-router.get('/:model', handleGetAll);
-router.get('/:model/:id', handleGetOne);
-router.post('/:model', handleCreate);
-router.put('/:model/:id', handleUpdate);
-router.delete('/:model/:id', handleDelete);
+
+//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRheWxvciIsImlhdCI6MTY0MjY1MjkyNH0.BL-X_vqKsM2kdoTEuvelj0ql8t5pMbPYDOh9T9Ha178
+
+router.get('/:model', basic, acl('read'), handleGetAll);
+router.get('/:model/:id', basic, acl('read'), handleGetOne);
+router.post('/:model', bearer, acl('create'), handleCreate);
+router.put('/:model/:id', bearer, acl('update'), handleUpdate);
+router.delete('/:model/:id', bearer, acl('delete'), handleDelete);
 
 async function handleGetAll(req, res) {
+  console.log('hit on the get all')
   let allRecords = await req.model.get();
   res.status(200).json(allRecords);
 }
