@@ -22,6 +22,8 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+
+
 // Routes
 app.use(authRoutes);
 app.use('/routes/v2', v2Routes);
